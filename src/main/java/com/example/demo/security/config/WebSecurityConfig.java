@@ -59,7 +59,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/api/posts/**").permitAll()
-                .antMatchers("/api/posts/**").permitAll()
                 .antMatchers("/api/purchases/**").permitAll()
                 .antMatchers("/api/companies/**").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
@@ -67,18 +66,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
-//		http
-//		.authorizeRequests(authorizeRequests ->
-//				authorizeRequests
-//					.antMatchers("/board/*").hasAnyRole("MANAGER", "OPERATOR")
-//					.antMatchers("/members/*").hasRole("MANAGER")
-//					.antMatchers("/").permitAll())
-//		.httpBasic().realmName("org team")
-//		.and()
-//		.sessionManagement()
-//		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
-
-
 }

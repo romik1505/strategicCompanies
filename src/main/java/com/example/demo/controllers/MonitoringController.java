@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.models.Company;
 import com.example.demo.models.User;
+import com.example.demo.pojo.Subscribe;
 import com.example.demo.repos.CompanyRepository;
 import com.example.demo.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/monitoring")
@@ -23,22 +23,30 @@ public class MonitoringController {
     @Autowired
     private UserRepository userRepository;
 
+
     @GetMapping("/user")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public void userAccess(@RequestParam String userId) {
-//        User user = userRepository.findById(Long.parseLong(userId)).get();
-//        return user.getCompanies();
-//        return companyRepository.findCompaniesByIdUsers(Long.parseLong(userId));
+//    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public List<Company> monitoring(@RequestParam Long userId) {
+        return companyRepository.findCompaniesByUsersId(userId);
     }
 
-    @PostMapping("/user")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public void linkUserCompany(@RequestParam String userId, @RequestParam String companyId) {
+    @PostMapping("/subscribe")
+//    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public void linkUserCompany(@RequestBody Subscribe subscribe) {
+        Company company = companyRepository.findCompanyById(subscribe.getCompanyId().longValue());
+        User user = userRepository.findUserById(subscribe.getUserId().longValue());
 
-//        User user = userRepository.findById(Long.parseLong(userId)).get();
-//        return user.getCompanies();
+        user.getCompanies().add(company);
+        userRepository.save(user);
+    }
 
-        //userRepository.findById(Long.parseLong(userId)).get().
+    @PostMapping("/unsubscribe")
+//    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public void unlinkUserCompany(@RequestParam Long userId, @RequestParam Long companyId) {
+        Company company = companyRepository.findCompanyById(companyId);
+        User user = userRepository.findUserById(userId);
 
+        user.getCompanies().remove(company);
+        userRepository.save(user);
     }
 }

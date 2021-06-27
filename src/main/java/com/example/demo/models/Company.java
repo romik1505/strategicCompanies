@@ -3,6 +3,7 @@ package com.example.demo.models;
 import com.example.demo.pojo.CompanyRequest;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
@@ -31,7 +32,8 @@ public class Company {
     @JsonIgnore
     private List<User> users;
 
-    @OneToMany
+    @OneToMany(mappedBy = "company")
+    @JsonIgnore
     List<Purchases> purchasesList;
     @OneToMany
     @JsonIgnore

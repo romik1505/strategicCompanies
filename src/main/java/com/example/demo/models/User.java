@@ -54,9 +54,5 @@ public class User {
     public Set<Company> getCompanies() {
         return companies;
     }
-
-    public void addCompany(Company company) {
-        companies.add(company);
-    }
 }
 
